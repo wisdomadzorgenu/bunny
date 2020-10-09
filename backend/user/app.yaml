@@ -1,0 +1,3 @@
+#Standard app engine
+service: user-task-service
+runtime: nodejs10

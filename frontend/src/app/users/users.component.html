@@ -1,0 +1,51 @@
+<h3>
+  Welcome<br>
+  <small>Easily create and manage users as well as their tasks</small>
+</h3>
+
+<div class="container">
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-8 offset-xl-3 offset-lg-3 offset-md-2">
+      <div class="button-section clearfix">
+        <button class="btn btn-success float-right" (click)="triggerUpdateUser('','')">New User</button>
+      </div>
+
+      <h5>List of users</h5>
+      <div id="tutor-list">
+          <div class="list-group">
+            <div class="list-group-item" *ngFor="let info of usersInformation; let ind=index;">
+              <span class="name-show" (click)="goToUserTasks(info.id,info.name)">{{info.name}}</span>
+              <div class="clearfix float-right">
+                <a [routerLink]="[]" (click)="triggerUpdateUser(info.id,info.name)">Update</a>
+                <a [routerLink]="[]" (click)="deleteUser(info.id,info.name,ind)">Delete</a>
+              </div>
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+<app-alert-information *ngIf="showAlert" [message]="alertMessage"
+  [messageType]="alertType" (onClosed)="onAlertClosed($event)">
+</app-alert-information>
+<ng-template #userTemplate>
+	<div class="user-modal">
+		<div class="modal-body">
+        <h4 class="text-center" *ngIf="toBeUpdatedUser.id">Update Existing User</h4>
+        <h4 class="text-center" *ngIf="!toBeUpdatedUser.id">Add New User</h4>
+      <label for="name">Name:</label>
+      <input type="text" id="name" [(ngModel)]="toBeUpdatedUser.name" class="form-control">
+      <div class="error-msg">{{modalErrorMessage}}</div>
+      <div class="clearfix">
+          <div class="footer">
+            <button type="button" class="btn btn-secondary" (click)="cancelModal()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="processUserInfo()"
+                    [disabled]="modalProcessing || !toBeUpdatedUser.name">
+              <ng-container *ngIf="modalProcessing">Processing ...</ng-container>
+              <ng-container *ngIf="!modalProcessing">Save</ng-container>
+          </button>
+          </div>
+      </div>
+    </div>
+	</div>
+</ng-template>

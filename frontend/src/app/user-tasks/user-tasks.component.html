@@ -1,0 +1,65 @@
+<h3>
+  Tasks<br>
+  <small>Easily create and manage tasks</small>
+</h3>
+
+<div class="container">
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-8 offset-xl-3 offset-lg-3 offset-md-2">
+      <div class="button-section clearfix">
+        <a [routerLink]="['/']" class="float-left">Back</a>
+        <button class="btn btn-success float-right" (click)="triggerUpdateTask('','','')">New Task</button>
+      </div>
+
+      <h5>{{name}} - Tasks</h5>
+      <div id="info-list">
+        <table class="table">
+          <tr>
+            <th>Description</th>
+            <th>State</th>
+            <th></th>
+          </tr>
+          <tr *ngFor="let info of taskInformation; let ind=index;">
+            <td>{{info.description}}</td>
+            <td>{{info.state}}</td>
+            <td>
+              <a [routerLink]="[]" queryParamsHandling="preserve"
+                (click)="triggerUpdateTask(info.id,info.description,info.state)">
+                Update
+              </a>
+            </td>
+          </tr>
+        </table>
+      </div>
+  </div>
+</div>
+</div>
+<app-alert-information *ngIf="showAlert" [message]="alertMessage"
+  [messageType]="alertType" (onClosed)="onAlertClosed($event)">
+</app-alert-information>
+<ng-template #userTaskTemplate>
+  <div class="user-modal">
+    <div class="modal-body">
+      <h4 class="text-center" *ngIf="toBeUpdatedTask.id">Update Existing Task</h4>
+      <h4 class="text-center" *ngIf="!toBeUpdatedTask.id">Add New Task</h4>
+      <label for="description">Description:</label>
+      <input type="text" id="description" [(ngModel)]="toBeUpdatedTask.description" class="form-control">
+      <label for="statename">State:</label>
+      <select id="description" [(ngModel)]="toBeUpdatedTask.state" class="form-control">
+        <option value="to do">to do</option>
+        <option value="done">done</option>
+      </select>
+      <div class="error-msg">{{modalErrorMessage}}</div>
+      <div class="clearfix">
+          <div class="footer">
+            <button type="button" class="btn btn-secondary" (click)="cancelModal()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="processTaskInfo()"
+                    [disabled]="modalProcessing || !toBeUpdatedTask.description || !toBeUpdatedTask.state">
+              <ng-container *ngIf="modalProcessing">Processing ...</ng-container>
+              <ng-container *ngIf="!modalProcessing">Save</ng-container>
+          </button>
+          </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
